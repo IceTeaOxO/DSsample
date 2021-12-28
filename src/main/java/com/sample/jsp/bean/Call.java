@@ -330,25 +330,39 @@ public class Call {
 		
 	}
 	public String[] getResult2() {
-		WebNode result = outputRoot2().get(outputRoot2().size()-1);
-		WebNode result2 = outputRoot2().get(outputRoot2().size()-2);
-		WebNode result3 = outputRoot2().get(outputRoot2().size()-3);
+        
 
-		String[] R = new String[9];
-			R[0]=result.getTitle();
-			R[1]=result.getURL();
-			R[2]=String.valueOf(result.getScore());
-			R[3]=result2.getTitle();
-			R[4]=result2.getURL();
-			R[5]=String.valueOf(result2.getScore());
-			R[6]=result3.getTitle();
-			
-			R[7]=result3.getURL();
-			R[8]=String.valueOf(result3.getScore());
+        String[] R = new String[9];
+        if(outputRoot2().size()>0) {
+            WebNode result = outputRoot2().get(outputRoot2().size()-1);
+            WebNode result2 = outputRoot2().get(outputRoot2().size()-2);
+            WebNode result3 = outputRoot2().get(outputRoot2().size()-3);
+            R[0]=result.getTitle();
+            R[1]=result.getURL();
+            R[2]=String.valueOf(result.getScore());
+            R[3]=result2.getTitle();
+            R[4]=result2.getURL();
+            R[5]=String.valueOf(result2.getScore());
+            R[6]=result3.getTitle();
+            R[7]=result3.getURL();
+            R[8]=String.valueOf(result3.getScore());
+        }else {
+            
+            R[0]="";
+            R[1]="Not Found";
+            R[2]="0";
 
-			
-		return R;
-	}
+            R[3]="";
+            R[4]="Not Found";
+            R[5]="0";
+
+            R[6]="";
+            R[7]="Not Found";
+            R[8]="0";
+        }
+            
+        return R;
+    }
 	public void constructor() {
 		//this.GoogleURL = "http://www.google.com/search?q="+keyword+"&oe=utf8&num=20";
 		this.GoogleURL = GoogleURL1+keyword+GoogleURL2;
