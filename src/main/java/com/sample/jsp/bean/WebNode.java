@@ -78,4 +78,7 @@ public class WebNode {
 	public void setScore(int score) {
 		this.score = score;
 	}
+	public static void main(String[] args) {
+		 System.out.println("QQ");
+	 }
 }

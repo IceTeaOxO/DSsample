@@ -1,6 +1,6 @@
 package com.sample.jsp.bean;
 public class Keyword {
-	 public String name;//name接收使用者輸入的搜尋關鍵字
+	 public String name;//name��雿輻�撓������摮�
 	 
 	 public Keyword(String name){
 	  this.name= name;
@@ -18,5 +18,8 @@ public class Keyword {
 	 @Override
 	 public String toString(){
 	  return "["+name+","+"]";
+	 }
+	 public static void main(String[] args) {
+		 System.out.println("QQ");
 	 }
 	}

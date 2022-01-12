@@ -35,7 +35,7 @@ public class MaxHeap {
 	            max = right;
 
 	        if (max != i) {
-	            swap(root, i, max);//把較大的往上一層提
+	            swap(root, i, max);//���之���銝�撅斗��
 	            maxheap(root, max);
 	        }
 	    }
@@ -52,4 +52,7 @@ public class MaxHeap {
 	        System.out.println("Heap Sort: " + Arrays.toString(array));
 	    }
 */
+	    public static void main(String[] args) {
+			 System.out.println("QQ");
+		 }
 }

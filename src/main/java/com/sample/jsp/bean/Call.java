@@ -13,10 +13,11 @@ public class Call {
 	public String WPaperURL1 = "https://wallpapers.com/search/";
 	public String GoogleURL1 = "https://www.google.com/search?q=";
 	public String GoogleURL2 = "&rlz=1C5GCEA_enTW944TW944&sxsrf=AOaemvL493PTkQhbZNEJNxyKsXRVkxCixQ:1636354467688&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiLi5e2l4j0AhW9y4sBHegWArsQ_AUoAXoECAEQAw&cshid=1636354620292537&biw=1356&bih=710&dpr=1";
-	public ArrayList<WebNode> URList,URList2;//這應該叫root
+	public ArrayList<WebNode> URList,URList2;//��府�root
 	public ArrayList<String> rand;
 	public String keyword;
 	public String BaseURL = "https://wallpapers.com";
+	public String treeString;
 	//https://www.google.com/search?q=cat&rlz=1C5GCEA_enTW944TW944&sxsrf=AOaemvL493PTkQhbZNEJNxyKsXRVkxCixQ:1636354467688&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiLi5e2l4j0AhW9y4sBHegWArsQ_AUoAXoECAEQAw&cshid=1636354620292537&biw=1356&bih=710&dpr=1
 	public Call() {
 		
@@ -34,11 +35,11 @@ public class Call {
 
 		    for (Element link : links) 
 		    {
-		    	if(link.attr("href").contains(".html")) {//把搜尋到的網址存成URL List
+		    	if(link.attr("href").contains(".html")) {//������雯��摮�RL List
 		    		//System.out.println("link : " + link.attr("href"));
 		    		String string = link.attr("href");
 		    		WebNode webNode = new WebNode(string);
-		    		URList.add(webNode);//一頁大約10個
+		    		URList.add(webNode);//銝���之蝝�10��
 		    	}
 		         //System.out.println("link : " + link.attr("href"));  
 		         //System.out.println("text : " + link.text());  
@@ -61,7 +62,7 @@ public class Call {
 
 				rand = new ArrayList<String>();
 			    for (Element link : links) {
-			    	if(link.attr("href").contains(".html")) {//把相似圖片網址選兩個存成左右小孩
+			    	if(link.attr("href").contains(".html")) {//��隡澆��雯�������椰�撠酋
 			    		if(link.attr("href").indexOf("https://wall")==0) {
 				    		rand.add(link.attr("href"));
 			    		}
@@ -71,7 +72,7 @@ public class Call {
 			    }
 				links = document.select("img");  
 				for (Element link : links) {
-			    	if(link.attr("data-src").contains("thumbnail")==false) {//存圖片
+			    	if(link.attr("data-src").contains("thumbnail")==false) {//摮���
 			    		if(link.attr("data-src").contains("images")) {
 			    			wn.setIMG(BaseURL+link.attr("data-src"));
 				    		//System.out.println("link : " + BaseURL+link.attr("data-src"));
@@ -93,7 +94,7 @@ public class Call {
 		    		wn.getLeftChildNode().setTitle(document.select("h1").toString());
 		    		links = document.select("img");  
 					for (Element link : links) {
-				    	if(link.attr("data-src").contains("thumbnail")==false) {//存圖片
+				    	if(link.attr("data-src").contains("thumbnail")==false) {//摮���
 				    		if(link.attr("data-src").contains("images")) {
 				    			wn.getLeftChildNode().setIMG(BaseURL+link.attr("data-src"));
 					    		//System.out.println("link2 : " + BaseURL+link.attr("data-src")); 
@@ -102,9 +103,10 @@ public class Call {
 				    	}
 					}
 					try {
-						wn.setScore(findLCS(wn.getTitle(), keyword));
-			    		wn.getLeftChildNode().setScore(findLCS(wn.getLeftChildNode().getTitle(), keyword));
-			    		wn.getRightChildNode().setScore(findLCS(wn.getRightChildNode().getTitle(), keyword));
+						//wn.setScore(findLCS(wn.getTitle(), keyword));
+			    		//wn.getLeftChildNode().setScore(findLCS(wn.getLeftChildNode().getTitle(), keyword));
+			    		//wn.getRightChildNode().setScore(findLCS(wn.getRightChildNode().getTitle(), keyword));
+
 					} catch (Exception e) {
 						// TODO: handle exception
 					}
@@ -124,7 +126,7 @@ public class Call {
 		    		wn.getRightChildNode().setTitle(document.select("h1").toString());
 		    		links = document.select("img");  
 					for (Element link : links) {
-				    	if(link.attr("data-src").contains("thumbnail")==false) {//存圖片
+				    	if(link.attr("data-src").contains("thumbnail")==false) {//摮���
 				    		if(link.attr("data-src").contains("images")) {
 				    			wn.getRightChildNode().setIMG(BaseURL+link.attr("data-src"));
 					    		//System.out.println("link3 : " + BaseURL+link.attr("data-src")); 
@@ -134,9 +136,20 @@ public class Call {
 				    	}
 					}
 					try {
-						wn.setScore(findLCS(wn.getTitle(), keyword));
+						wn.setScore((findLCS(wn.getTitle(), keyword))*2);
+
 			    		wn.getLeftChildNode().setScore(findLCS(wn.getLeftChildNode().getTitle(), keyword));
+			    		int a = wn.getLeftChildNode().score;
 			    		wn.getRightChildNode().setScore(findLCS(wn.getRightChildNode().getTitle(), keyword));
+			    		int b = wn.getRightChildNode().score;
+			    		//System.out.println("-"+a);
+			    		//System.out.println("-"+b);
+			    		//System.out.println("-"+wn.getScore());
+
+
+			    		//System.out.println("-"+wn.getScore());
+
+
 					} catch (Exception e) {
 						// TODO: handle exception
 					}
@@ -150,7 +163,7 @@ public class Call {
 					}
 	    		}
 	    		
-	    		//我懶得在寫迴圈找相符字數
+	    		//��敺撖怨艘���蝚血�
 				
 	    		
 	    		
@@ -161,7 +174,7 @@ public class Call {
 		    
 		}
 	}
-	public void preOrder1() {//設置分數
+	public void preOrder1() {//閮剔蔭��
 		for(WebNode wn:URList) {
 			int temp = wn.getScore();
 			try {
@@ -171,7 +184,7 @@ public class Call {
 				// TODO: handle exception
 				//not found
 			}
-			//其實這裡用if寫會比較好，但是我懶得處理例外了
+			//�撖阡�ㄐ�if撖急���末嚗���敺������
 		}
 	}
 	public int findLCS(String x, String y){
@@ -217,12 +230,13 @@ public class Call {
 		}
 	}*/
 	public String[] getResult() {
-		WebNode result = outputRoot().get(outputRoot().size()-1);
-		//WebNode result2 = outputRoot().get(outputRoot().size()-2);
-		//WebNode result3 = outputRoot().get(outputRoot().size()-3);
-
-		String[] R = new String[7];
-		if(outputRoot().size()>1) {
+		
+		
+		String[] R = new String[18];
+		if(outputRoot().size()>3) {
+			WebNode result = outputRoot().get(outputRoot().size()-1);
+			WebNode result2 = outputRoot().get(outputRoot().size()-2);
+			WebNode result3 = outputRoot().get(outputRoot().size()-3);
 			R[0]=result.getTitle();
 			R[1]=result.getURL();
 			R[2]=result.getIMG();
@@ -230,27 +244,32 @@ public class Call {
 			R[4]=result.getLeftChildNode().getIMG();
 			R[5]=result.getRightChildNode().getTitle();
 			R[6]=result.getRightChildNode().getIMG();
+			R[7]=result.getLeftChildNode().getURL();
+			R[8]=result.getRightChildNode().getURL();
+			R[9]=result2.getTitle();
+			R[10]=result2.getLeftChildNode().getTitle();
+			R[11]=result2.getRightChildNode().getTitle();
+			R[12]=result3.getTitle();
+			R[13]=result3.getLeftChildNode().getTitle();
+			R[14]=result3.getRightChildNode().getTitle();
+			R[15]=String.valueOf(result.getScore());
+			R[16]=String.valueOf(result.getLeftChildNode().getScore());
+			R[17]=String.valueOf(result.getRightChildNode().getScore());//child score
+			
+
 		}else {
-			R[0]="";
+			R[0]="Not Found";
 			R[1]="Not Found";
-			R[2]=null;
+			R[2]="Not Found";
 			R[3]="Not Found";
 			R[4]=null;
 			R[5]="Not Found";
 			R[6]=null;
 		}
 		
-		/*
-		R[7]=result2.getTitle();
-		R[8]=result2.getURL();
-		R[9]=result2.getIMG();
-		R[10]=result3.getTitle();
-		R[11]=result3.getURL();
-		R[12]=result3.getIMG();
-		*/
-		return R;//我好像只能傳基本的資料型態？
-		//改preorder
-		//修復找不到Bug
+		
+		return R;
+		
 	}
 	public String getKeyword() {
 		return keyword;
@@ -269,7 +288,7 @@ public class Call {
 		    	
 			    //System.out.println(link.attr("href")+"\n"+"---");
 		    	//System.out.println(link.tagName("a[href]"));
-		    	if(link.attr("data-src").indexOf("https")==0) {//把搜尋到的網址存成URL List
+		    	if(link.attr("data-src").indexOf("https")==0) {//������雯��摮�RL List
 		    		//System.out.println("src:"+link.attr("data-src"));
 		    		//System.out.println("width:"+link.attr("width"));
 		    		//System.out.println("height:"+link.attr("height"));
@@ -330,39 +349,39 @@ public class Call {
 		
 	}
 	public String[] getResult2() {
-        
+		
 
-        String[] R = new String[9];
-        if(outputRoot2().size()>0) {
-            WebNode result = outputRoot2().get(outputRoot2().size()-1);
-            WebNode result2 = outputRoot2().get(outputRoot2().size()-2);
-            WebNode result3 = outputRoot2().get(outputRoot2().size()-3);
-            R[0]=result.getTitle();
-            R[1]=result.getURL();
-            R[2]=String.valueOf(result.getScore());
-            R[3]=result2.getTitle();
-            R[4]=result2.getURL();
-            R[5]=String.valueOf(result2.getScore());
-            R[6]=result3.getTitle();
-            R[7]=result3.getURL();
-            R[8]=String.valueOf(result3.getScore());
-        }else {
-            
-            R[0]="";
-            R[1]="Not Found";
-            R[2]="0";
+		String[] R = new String[9];
+		if(outputRoot2().size()>0) {
+			WebNode result = outputRoot2().get(outputRoot2().size()-1);
+			WebNode result2 = outputRoot2().get(outputRoot2().size()-2);
+			WebNode result3 = outputRoot2().get(outputRoot2().size()-3);
+			R[0]=result.getTitle();
+			R[1]=result.getURL();
+			R[2]=String.valueOf(result.getScore());
+			R[3]=result2.getTitle();
+			R[4]=result2.getURL();
+			R[5]=String.valueOf(result2.getScore());
+			R[6]=result3.getTitle();
+			R[7]=result3.getURL();
+			R[8]=String.valueOf(result3.getScore());
+		}else {
+			
+			R[0]="";
+			R[1]="Not Found";
+			R[2]="0";
 
-            R[3]="";
-            R[4]="Not Found";
-            R[5]="0";
+			R[3]="";
+			R[4]="Not Found";
+			R[5]="0";
 
-            R[6]="";
-            R[7]="Not Found";
-            R[8]="0";
-        }
-            
-        return R;
-    }
+			R[6]="";
+			R[7]="Not Found";
+			R[8]="0";
+		}
+			
+		return R;
+	}
 	public void constructor() {
 		//this.GoogleURL = "http://www.google.com/search?q="+keyword+"&oe=utf8&num=20";
 		this.GoogleURL = GoogleURL1+keyword+GoogleURL2;
@@ -388,7 +407,13 @@ public class Call {
 		Connect2();
 		preOrder2();
 	}
+	public String printTree() {
+		treeString = "";
+		
+		return treeString;
+	}
 	public static void main(String[] args) {
+		System.out.println("QQ");
 		//Call C = new Call();
 		//C.setKeyword("cat");
 		//C.constructor();
